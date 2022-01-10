@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--    <script language="javascript" type="text/javascript" src="registration.js"></script>-->
+<!--    <script language="javascript" type="text/javascript" src="userEditor.js"></script>-->
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="/auth/registration">
+    <div>Enter your username</div>
+    <input type="text" id="txtUserName" required="required"/> <br>
+    <div>Enter your password</div>
+    <input type="text" id="txtPassword" required="required"/><br>
+    <div>Enter your email</div>
+    <input type="text" id="txtEmail" required="required"/><br>
+    <div><input type="button" id="cmdRegistration" value="registration"/></div>
+    <script>
+        cmdRegistration.addEventListener("click", function () {
+            addUser("/auth/registration", jsonUserCreate(txtUserName.value, txtPassword.value, txtEmail.value));
+        })
+
+        function addUser() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", arguments[0], false);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            bodyStr = arguments[1]
+            xhr.send(bodyStr)
+            //document.location.href = "http://localhost:8080/html/" + xhr.responseText
+            document.location.href = "login.html"
+        }
+
+        class User{
+            username;
+            password;
+            email;
+        }
+
+        function jsonUserCreate() {
+            let user1 = new User();
+            user1.password = arguments[1]
+            user1.username = arguments[0]
+            user1.email = arguments[2]
+            return JSON.stringify(user1);
+        }
+    </script>
+</form>
+
+</body>
+</html>
