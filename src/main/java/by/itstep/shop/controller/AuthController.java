@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.util.Map;
 
 @Controller
@@ -23,12 +22,10 @@ public class AuthController {
 
     private final UserService userService;
     private final InventoryService inventoryService;
-    private final ItemService itemService;
 
     public AuthController(UserService userService, InventoryService inventoryService, ItemService itemService) {
         this.userService = userService;
         this.inventoryService = inventoryService;
-        this.itemService = itemService;
     }
 
 
@@ -39,7 +36,7 @@ public class AuthController {
 
     @GetMapping("/success")
     public String getSuccessPage() {
-        return "start";
+        return "success";
     }
 
     @GetMapping("/registration")
@@ -63,7 +60,7 @@ public class AuthController {
         user.setStatus(Status.ACTIVE);
         model.put("money", user.getMoney());
         userService.save(user);
-        return "/profile";
+        return "login";
     }
     //@PostMapping("/registration")
 ////    public String addUser(User user, Map<String, Object> model) {
@@ -79,5 +76,10 @@ public class AuthController {
 ////        userService.save(user);
 ////        return "redirect:/login";
 ////    }
+
+    @PostMapping("/logout")
+    public String logout() {
+        return "redirect:/auth/login";
+    }
 
 }
