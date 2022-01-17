@@ -14,13 +14,28 @@ public class Item {
 
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "inventory_id")
-    private Inventory inventory;
-
     private Long prise;
 
+    private String status;
+
+    private String img;
+
     public Item() {
+    }
+
+    public Item(String name, String description, Long prise, String img) {
+        this.name = name;
+        this.description = description;
+        this.prise = prise;
+        this.img = img;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getId() {
@@ -47,14 +62,6 @@ public class Item {
         this.description = description;
     }
 
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
-    }
-
     public Long getPrise() {
         return prise;
     }
@@ -63,14 +70,11 @@ public class Item {
         this.prise = prise;
     }
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", inventory=" + inventory +
-                ", prise=" + prise +
-                '}';
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 }

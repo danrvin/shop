@@ -1,10 +1,8 @@
 package by.itstep.shop.service.impl;
 
 
-import by.itstep.shop.dao.model.Inventory;
 import by.itstep.shop.dao.model.Item;
 import by.itstep.shop.dao.model.User;
-import by.itstep.shop.dao.repo.InventoryRepo;
 import by.itstep.shop.dao.repo.ItemRepo;
 import by.itstep.shop.dao.repo.UserRepo;
 import by.itstep.shop.service.UserService;
@@ -20,12 +18,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
     private final ItemRepo itemRepo;
-    private final InventoryRepo inventoryRepo;
 
-    public UserServiceImpl(UserRepo userRepo, ItemRepo itemRepo, InventoryRepo inventoryRepo) {
+
+    public UserServiceImpl(UserRepo userRepo, ItemRepo itemRepo ) {
         this.userRepo = userRepo;
         this.itemRepo = itemRepo;
-        this.inventoryRepo = inventoryRepo;
+
     }
 
     @Override
@@ -66,20 +64,6 @@ public class UserServiceImpl implements UserService {
         Long wallet = moneys + prise;
         user.setMoney(wallet);
         userRepo.save(user);
-    }
-
-    @Override
-    public void userRemoveMoneyFromInventory(User user, Long id) {
-        Inventory inventory = inventoryRepo.findInventoryById(id);
-        Long price = inventory.getPrice();
-        Long moneys = user.getMoney();
-        if (moneys >= price) {
-            Long wallet = moneys - price;
-            user.setMoney(wallet);
-            userRepo.save(user);
-        } else {
-            throw new NotEnoughMoneyException("you dont have enough money");
-        }
     }
 
     @Override

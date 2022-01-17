@@ -4,7 +4,6 @@ package by.itstep.shop.controller;
 import by.itstep.shop.dao.model.User;
 import by.itstep.shop.dao.model.enums.Role;
 import by.itstep.shop.dao.model.enums.Status;
-import by.itstep.shop.service.InventoryService;
 import by.itstep.shop.service.ItemService;
 import by.itstep.shop.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,11 +20,9 @@ import java.util.Map;
 public class AuthController {
 
     private final UserService userService;
-    private final InventoryService inventoryService;
 
-    public AuthController(UserService userService, InventoryService inventoryService, ItemService itemService) {
+    public AuthController(UserService userService, ItemService itemService) {
         this.userService = userService;
-        this.inventoryService = inventoryService;
     }
 
 
@@ -55,27 +52,12 @@ public class AuthController {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.setStartMoney(user);
-        inventoryService.createInventories();
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
         model.put("money", user.getMoney());
         userService.save(user);
         return "login";
     }
-    //@PostMapping("/registration")
-////    public String addUser(User user, Map<String, Object> model) {
-////        User userFromDb = userService.findByUsername(user.getUsername());
-////        if (userFromDb != null) {
-////            model.put("message", "User exist!");
-////            return "registration";
-////        }
-//////        userService.setActive(user);
-////        userService.setStartMoney(user);
-//////        user.setRoles(Collections.singleton(Role.USER));
-////        inventoryService.createInventories();
-////        userService.save(user);
-////        return "redirect:/login";
-////    }
 
     @PostMapping("/logout")
     public String logout() {
