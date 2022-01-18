@@ -1,32 +1,21 @@
 package by.itstep.shop.dao.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Table(name = "ord")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long itemId;
-
-    private String itemStatus;
-
-    private String username;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Order() {
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public Long getId() {
@@ -37,20 +26,11 @@ public class Order {
         this.id = id;
     }
 
-    public Long getItemId() {
-        return itemId;
+    public User getUser() {
+        return user;
     }
 
-    public void setItemId(Long itemId) {
-        this.itemId = itemId;
+    public void setUser(User user) {
+        this.user = user;
     }
-
-    public String getItemStatus() {
-        return itemStatus;
-    }
-
-    public void setItemStatus(String itemStatus) {
-        this.itemStatus = itemStatus;
-    }
-
 }

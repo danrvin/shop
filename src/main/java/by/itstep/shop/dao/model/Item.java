@@ -20,14 +20,19 @@ public class Item {
 
     private String img;
 
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
     public Item() {
     }
 
-    public Item(String name, String description, Long prise, String img) {
-        this.name = name;
-        this.description = description;
-        this.prise = prise;
-        this.img = img;
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     public String getStatus() {

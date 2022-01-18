@@ -3,13 +3,18 @@ package by.itstep.shop.service.impl;
 
 import by.itstep.shop.dao.model.Item;
 import by.itstep.shop.dao.model.User;
+import by.itstep.shop.dao.model.enums.Role;
+import by.itstep.shop.dao.model.enums.Status;
 import by.itstep.shop.dao.repo.ItemRepo;
 import by.itstep.shop.dao.repo.UserRepo;
 import by.itstep.shop.service.UserService;
 import by.itstep.shop.service.exceptions.NotEnoughMoneyException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -42,12 +47,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findByUsernameOptional(String name) {
+        return userRepo.findUserByUsername(name);
+    }
+
+    @Override
     public User findByEmail(String email) {
         return userRepo.findByEmail(email).get();
     }
 
     @Override
     public User save(User user) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+        passwordEncoder.encode(user.getPassword());
+        user.setRole(Role.USER);
+        user.setStatus(Status.ACTIVE);
+        user.setMoney(400L);
         return userRepo.save(user);
     }
 

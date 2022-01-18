@@ -1,10 +1,13 @@
 package by.itstep.shop.service.impl;
 
 import by.itstep.shop.dao.model.Item;
+import by.itstep.shop.dao.model.Order;
 import by.itstep.shop.dao.repo.ItemRepo;
 import by.itstep.shop.service.ItemService;
 import by.itstep.shop.service.exceptions.NotFoundItemException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -36,6 +39,11 @@ public class ItemServiceImpl implements ItemService {
         } else {
             throw new NotFoundItemException("error item id");
         }
+    }
+
+    @Override
+    public List<Item> findAllByOrder(Order order) {
+        return itemRepo.findAllByOrder(order);
     }
 
     @Override

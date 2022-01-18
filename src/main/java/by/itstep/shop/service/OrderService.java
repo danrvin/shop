@@ -1,11 +1,21 @@
 package by.itstep.shop.service;
 
+import by.itstep.shop.dao.model.Item;
+import by.itstep.shop.dao.model.User;
+
+import java.util.List;
+
 public interface OrderService {
-    void putInBasket(Long itemId, String username);
+    void deleteInOrder(Long itemId);
 
-    void deleteInBasket(Long itemId);
+    List<Item> allItemsInOrder(User user);
 
-    void deleteAllInBasket(String username);
-
-    void buyItemsInBasket(String username);
+    void deleteAllInOrder(User user);
+//    void putInBasket(Long itemId, User user);
+//
+//    void deleteInBasket(Long itemId);
+//
+//    void deleteAllInBasket(String username);
+//
+//    void buyItemsInBasket(String username);
 }

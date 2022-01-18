@@ -25,41 +25,63 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void putInBasket(Long itemId, String username) {
-        Order order = new Order();
-        order.setItemId(itemId);
-        order.setUsername(username);
-        order.setItemStatus("IN BASKET");
-        orderRepo.save(order);
+    public void deleteInOrder(Long itemId) {
+        Item item = itemRepo.findItemById(itemId);
+        item.setOrder(null);
+        itemRepo.save(item);
     }
 
     @Override
-    public void deleteInBasket(Long itemId) {
-        Order order = orderRepo.findOrderByItemId(itemId);
-        orderRepo.delete(order);
+    public List<Item> allItemsInOrder(User user) {
+        Order order = orderRepo.findByUser(user);
+        return itemRepo.findAllByOrder(order);
     }
 
     @Override
-    public void deleteAllInBasket(String username) {
-        orderRepo.deleteAllByUsername(username);
-    }
-
-    @Override
-    public void buyItemsInBasket(String username) {
-        List<Order> orders = orderRepo.findAllByUsername(username);
-
-        Long price = 0L;
-
-        for(Order order : orders) {
-            Long itemId = order.getItemId();
-            Item item = itemRepo.findItemById(itemId);
-            price += item.getPrise();
+    public void deleteAllInOrder(User user) {
+        Order order = orderRepo.findByUser(user);
+        List<Item> items = itemRepo.findAllByOrder(order);
+        for (Item item: items) {
+            item.setOrder(null);
         }
-
-        User user = userRepo.findByUsername(username);
-        Long money = user.getMoney();
-        Long remainder = money - price;
-        user.setMoney(remainder);
-        userRepo.save(user);
     }
+
+//    @Override
+//    public void putInBasket(Long itemId, User user) {
+//        Order order = new Order();
+//        Item item = itemRepo.findItemById(itemId);
+//        item.setOrder(order);
+//        order.setUser(user);
+//        orderRepo.save(order);
+//    }
+//
+//    @Override
+//    public void deleteInOrder(Long itemId) {
+//        Order order = orderRepo.findOrderByItemId(itemId);
+//        orderRepo.delete(order);
+//    }
+//
+//    @Override
+//    public void deleteAllInBasket(String username) {
+//        orderRepo.deleteAllByUsername(username);
+//    }
+//
+//    @Override
+//    public void buyItemsInBasket(String username) {
+//        List<Order> orders = orderRepo.findAllByUsername(username);
+//
+//        Long price = 0L;
+//
+//        for(Order order : orders) {
+//            Long itemId = itemRepo.findItemById();
+//            Item item = itemRepo.findItemById(itemId);
+//            price += item.getPrise();
+//        }
+//
+//        User user = userRepo.findByUsername(username);
+//        Long money = user.getMoney();
+//        Long remainder = money - price;
+//        user.setMoney(remainder);
+//        userRepo.save(user);
+//    }
 }

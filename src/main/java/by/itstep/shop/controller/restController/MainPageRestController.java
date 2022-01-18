@@ -23,13 +23,14 @@ public class MainPageRestController {
 
     @PostMapping("/putInBasket")
     public String InBasket(@RequestBody Long itemId, Principal principal) {
-        orderService.putInBasket(itemId,principal.getName());
-        return "correct";
+//        orderService.putInBasket(itemId,principal.getName());
+//        return "correct";
+        return null;
     }
 
     @PostMapping("/deleteInBasket")
     public String deleteInBasket(@RequestBody Long itemId) {
-        orderService.deleteInBasket(itemId);
+//        orderService.deleteInBasket(itemId);
         return "correct";
     }
 }
