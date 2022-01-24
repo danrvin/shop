@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "ord")
-public class Order {
+public class Basket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,7 +15,7 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Order() {
+    public Basket() {
     }
 
     public Long getId() {

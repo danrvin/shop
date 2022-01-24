@@ -22,17 +22,17 @@ public class Item {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order order;
+    private Basket basket;
 
     public Item() {
     }
 
-    public Order getOrder() {
-        return order;
+    public Basket getBasket() {
+        return basket;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setBasket(Basket basket) {
+        this.basket = basket;
     }
 
     public String getStatus() {

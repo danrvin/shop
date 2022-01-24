@@ -1,14 +1,15 @@
 package by.itstep.shop.service.impl;
 
 
+import by.itstep.shop.dao.model.Basket;
 import by.itstep.shop.dao.model.Item;
 import by.itstep.shop.dao.model.User;
 import by.itstep.shop.dao.model.enums.Role;
 import by.itstep.shop.dao.model.enums.Status;
 import by.itstep.shop.dao.repo.ItemRepo;
+import by.itstep.shop.dao.repo.BasketRepo;
 import by.itstep.shop.dao.repo.UserRepo;
 import by.itstep.shop.service.UserService;
-import by.itstep.shop.service.exceptions.NotEnoughMoneyException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,12 +24,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
     private final ItemRepo itemRepo;
+    private final BasketRepo basketRepo;
 
 
-    public UserServiceImpl(UserRepo userRepo, ItemRepo itemRepo ) {
+    public UserServiceImpl(UserRepo userRepo, ItemRepo itemRepo, BasketRepo basketRepo) {
         this.userRepo = userRepo;
         this.itemRepo = itemRepo;
 
+        this.basketRepo = basketRepo;
     }
 
     @Override
@@ -59,10 +62,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
-        passwordEncoder.encode(user.getPassword());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
         user.setMoney(400L);
+        userRepo.save(user);
+        Basket basket = new Basket();
+        basket.setUser(user);
+        basketRepo.save(basket);
         return userRepo.save(user);
     }
 

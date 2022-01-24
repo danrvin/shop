@@ -2,7 +2,7 @@ package by.itstep.shop.service;
 
 
 import by.itstep.shop.dao.model.Item;
-import by.itstep.shop.dao.model.Order;
+import by.itstep.shop.dao.model.Basket;
 
 import java.util.List;
 
@@ -14,9 +14,10 @@ public interface ItemService {
 
     Item findItemById(Long id);
 
-    List<Item> findAllByOrder(Order order);
+    List<Item> findAllByOrder(Basket basket);
 
     void save(Item item);
 
 
+    List<Item> getAll();
 }

@@ -1,7 +1,7 @@
 package by.itstep.shop.service.impl;
 
 import by.itstep.shop.dao.model.Item;
-import by.itstep.shop.dao.model.Order;
+import by.itstep.shop.dao.model.Basket;
 import by.itstep.shop.dao.repo.ItemRepo;
 import by.itstep.shop.service.ItemService;
 import by.itstep.shop.service.exceptions.NotFoundItemException;
@@ -42,12 +42,17 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> findAllByOrder(Order order) {
-        return itemRepo.findAllByOrder(order);
+    public List<Item> findAllByOrder(Basket basket) {
+        return itemRepo.findAllByBasket(basket);
     }
 
     @Override
     public void save(Item item) {
         itemRepo.save(item);
+    }
+
+    @Override
+    public List<Item> getAll() {
+        return itemRepo.findAll();
     }
 }
