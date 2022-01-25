@@ -16,8 +16,6 @@ public class Item {
 
     private Long prise;
 
-    private String status;
-
     private String img;
 
     @ManyToOne
@@ -33,14 +31,6 @@ public class Item {
 
     public void setBasket(Basket basket) {
         this.basket = basket;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public Long getId() {

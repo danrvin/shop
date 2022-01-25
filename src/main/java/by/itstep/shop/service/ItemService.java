@@ -20,4 +20,6 @@ public interface ItemService {
 
 
     List<Item> getAll();
+
+    Item updateItem(Item itemFromDb, Item item);
 }

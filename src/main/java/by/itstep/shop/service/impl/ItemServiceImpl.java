@@ -27,7 +27,6 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void putItemInBasket(Long itemId) {
         Item item = itemRepo.findItemById(itemId);
-        item.setStatus("IN BASKET");
         itemRepo.save(item);
     }
 
@@ -54,5 +53,14 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<Item> getAll() {
         return itemRepo.findAll();
+    }
+
+    @Override
+    public Item updateItem(Item itemFromDb, Item item) {
+        itemFromDb.setName(item.getName());
+        itemFromDb.setDescription(item.getDescription());
+        itemFromDb.setPrise(item.getPrise());
+        itemRepo.save(itemFromDb);
+        return itemFromDb;
     }
 }

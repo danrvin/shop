@@ -1,10 +1,12 @@
 package by.itstep.shop.dao.model.enums;
 
 public enum Permission {
-    ITEMS_READ("items:read"),
-    ITEMS_WRITE("items:write"),
-    USERS_READ("users:read"),
-    USERS_WRITE("users:write");
+    ITEMS_READ("item:read"),
+    ITEMS_WRITE("item:write"),
+    USERS_READ("user:read"),
+    USERS_WRITE("user:write"),
+    BASKET_READ("basket:read"),
+    BASKET_WRITE("basket:write");
 
     private final String permission;
 

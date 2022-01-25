@@ -74,6 +74,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteUser(User user) {
+        userRepo.delete(user);
+    }
+
+    @Override
     public void setStartMoney(User user) {
         user.setMoney(400L);
     }
@@ -101,5 +106,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> users() {
         return userRepo.findAll();
+    }
+
+    @Override
+    public User updateUser(User userFromDb, User user) {
+        userFromDb.setPassword(user.getPassword());
+        if (user.getStatus() != null) {
+            userFromDb.setStatus(user.getStatus());
+        }
+        userFromDb.setEmail(user.getEmail());
+        userFromDb.setRole(user.getRole());
+        userRepo.save(userFromDb);
+        return userFromDb;
     }
 }

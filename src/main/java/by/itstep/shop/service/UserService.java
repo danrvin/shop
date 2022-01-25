@@ -19,6 +19,8 @@ public interface UserService {
 
     User save(User user);
 
+    void deleteUser(User user);
+
     void setStartMoney(User user);
 
     void userSetMoneyFromItem(User user, Long id);
@@ -28,4 +30,6 @@ public interface UserService {
     User getOne(Long id);
 
     List<User> users();
+
+    User updateUser(User userFromDb, User user);
 }
