@@ -58,7 +58,7 @@ public class BasketServiceImpl implements BasketService {
     @Override
     public void buyItemInBasket(Long itemId, User user) {
         Item item = itemRepo.findItemById(itemId);
-        Long money = user.getMoney();
+        Double money = user.getMoney();
         user.setMoney(money - item.getPrise());
         itemRepo.delete(item);
         userRepo.save(user);

@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setMoney(400L);
+        user.setMoney(400.0);
         userRepo.save(user);
         Basket basket = new Basket();
         basket.setUser(user);
@@ -80,15 +80,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void setStartMoney(User user) {
-        user.setMoney(400L);
+        user.setMoney(400.0);
     }
 
     @Override
     public void userSetMoneyFromItem(User user, Long id) {
         Item item = itemRepo.findItemById(id);
-        Long moneys = user.getMoney();
-        Long prise = item.getPrise();
-        Long wallet = moneys + prise;
+        Double moneys = user.getMoney();
+        Double prise = item.getPrise();
+        Double wallet = moneys + prise;
         user.setMoney(wallet);
         userRepo.save(user);
     }

@@ -22,4 +22,7 @@ public interface ItemService {
     List<Item> getAll();
 
     Item updateItem(Item itemFromDb, Item item);
+
+
+    List<Item> sortItemByPrice(Double firstPrise, Double lastPrice);
 }

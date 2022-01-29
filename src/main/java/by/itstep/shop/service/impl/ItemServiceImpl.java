@@ -7,6 +7,7 @@ import by.itstep.shop.service.ItemService;
 import by.itstep.shop.service.exceptions.NotFoundItemException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -62,5 +63,23 @@ public class ItemServiceImpl implements ItemService {
         itemFromDb.setPrise(item.getPrise());
         itemRepo.save(itemFromDb);
         return itemFromDb;
+    }
+
+    @Override
+    public List<Item> sortItemByPrice(Double startPrise, Double lastPrice) {
+        List<Item> allItems = itemRepo.findAll();
+        List<Item> sortItems = new ArrayList<>();
+        if (startPrise < 0 && lastPrice < 0) {
+            return itemRepo.findAll();
+        }
+        if (startPrise > lastPrice) {
+            return itemRepo.findAll();
+        }
+        for (Item item : allItems) {
+            if (item.getPrise() >= startPrise && item.getPrise() <= lastPrice) {
+                sortItems.add(item);
+            }
+        }
+        return sortItems;
     }
 }
