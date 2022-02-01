@@ -16,12 +16,10 @@ public class BasketRestController {
 
     private final BasketService basketService;
     private final UserService userService;
-    private final ItemService itemService;
 
-    public BasketRestController(BasketService basketService, UserService userService, ItemService itemService) {
+    public BasketRestController(BasketService basketService, UserService userService) {
         this.basketService = basketService;
         this.userService = userService;
-        this.itemService = itemService;
     }
 
     @PostMapping("/put/{id}")
@@ -44,10 +42,4 @@ public class BasketRestController {
         basketService.deleteInBasket(id);
         return basketService.allItemsInBasket(userService.findByUsername(principal.getName()));
     }
-
-    @GetMapping("/items")
-    public List<Item> items() {
-        return itemService.getAll();
-    }
-
 }

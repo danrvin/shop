@@ -6,13 +6,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public enum Role {
-    USER(Set.of(Permission.ITEMS_READ, Permission.ITEMS_WRITE,
-            Permission.USERS_READ, Permission.BASKET_WRITE,
-            Permission.BASKET_READ)),
-    ADMIN(Set.of(Permission.ITEMS_WRITE, Permission.ITEMS_READ,
-            Permission.USERS_WRITE, Permission.USERS_READ,
-            Permission.BASKET_WRITE, Permission.BASKET_READ));
-
+    USER(
+            Set.of(Permission.ITEMS_READ, Permission.ITEMS_WRITE, Permission.BASKET_WRITE,
+                    Permission.BASKET_READ, Permission.TRANSACTION_BUY)),
+    ADMIN(
+            Set.of(Permission.ITEMS_WRITE, Permission.ITEMS_READ,
+                    Permission.USERS_WRITE, Permission.USERS_READ,
+                    Permission.BASKET_WRITE, Permission.BASKET_READ, Permission.TRANSACTION_BUY));
     private final Set<Permission> permissions;
 
     Role(Set<Permission> permissions) {

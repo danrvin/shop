@@ -7,6 +7,7 @@ import by.itstep.shop.dao.repo.ItemRepo;
 import by.itstep.shop.dao.repo.BasketRepo;
 import by.itstep.shop.dao.repo.UserRepo;
 import by.itstep.shop.service.BasketService;
+import by.itstep.shop.service.exceptions.NotEnoughMoneyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,7 +60,12 @@ public class BasketServiceImpl implements BasketService {
     public void buyItemInBasket(Long itemId, User user) {
         Item item = itemRepo.findItemById(itemId);
         Double money = user.getMoney();
-        user.setMoney(money - item.getPrise());
+        if (user.getMoney() > item.getPrise()) {
+            user.setMoney(money - item.getPrise());
+        } else {
+            throw new NotEnoughMoneyException("Not enough money");
+        }
+
         itemRepo.delete(item);
         userRepo.save(user);
     }

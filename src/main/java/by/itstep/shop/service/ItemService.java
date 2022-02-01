@@ -9,14 +9,9 @@ import java.util.List;
 public interface ItemService {
     void deleteItem(Item item);
 
-
-    void putItemInBasket(Long itemId);
+    Item save(Item item);
 
     Item findItemById(Long id);
-
-    List<Item> findAllByOrder(Basket basket);
-
-    void save(Item item);
 
 
     List<Item> getAll();
@@ -25,4 +20,5 @@ public interface ItemService {
 
 
     List<Item> sortItemByPrice(Double firstPrise, Double lastPrice);
+
 }

@@ -1,12 +1,11 @@
 package by.itstep.shop.controller.restController;
 
 import by.itstep.shop.dao.model.Item;
+import by.itstep.shop.dao.model.User;
 import by.itstep.shop.service.BasketService;
 import by.itstep.shop.service.UserService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -23,7 +22,13 @@ public class TransactionRestController {
         this.userService = userService;
     }
 
+    @PostMapping("/money")
+    public User updateMoney(@RequestBody Double money, Principal principal) {
+        return userService.addMoney(money, userService.findByUsername(principal.getName()));
+    }
+
     @PostMapping("/{id}")
+    @PreAuthorize(value = "hasAuthority('transaction:buy')")
     public List<Item> buyItemsInBasket(@PathVariable Long id, Principal principal) {
         basketService.buyItemInBasket(id, userService.loadUserByUsername(principal.getName()));
         return basketService.allItemsInBasket(userService.findByUsername(principal.getName()));

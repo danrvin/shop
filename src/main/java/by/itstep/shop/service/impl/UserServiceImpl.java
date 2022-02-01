@@ -23,14 +23,11 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepo userRepo;
-    private final ItemRepo itemRepo;
     private final BasketRepo basketRepo;
 
 
-    public UserServiceImpl(UserRepo userRepo, ItemRepo itemRepo, BasketRepo basketRepo) {
+    public UserServiceImpl(UserRepo userRepo, BasketRepo basketRepo) {
         this.userRepo = userRepo;
-        this.itemRepo = itemRepo;
-
         this.basketRepo = basketRepo;
     }
 
@@ -52,11 +49,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByUsernameOptional(String name) {
         return userRepo.findUserByUsername(name);
-    }
-
-    @Override
-    public User findByEmail(String email) {
-        return userRepo.findByEmail(email).get();
     }
 
     @Override
@@ -84,23 +76,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void userSetMoneyFromItem(User user, Long id) {
-        Item item = itemRepo.findItemById(id);
-        Double moneys = user.getMoney();
-        Double prise = item.getPrise();
-        Double wallet = moneys + prise;
-        user.setMoney(wallet);
-        userRepo.save(user);
-    }
-
-    @Override
     public List<User> findAll() {
         return userRepo.findAll();
-    }
-
-    @Override
-    public User getOne(Long id) {
-        return userRepo.findUserById(id);
     }
 
     @Override
@@ -118,5 +95,13 @@ public class UserServiceImpl implements UserService {
         userFromDb.setRole(user.getRole());
         userRepo.save(userFromDb);
         return userFromDb;
+    }
+
+    @Override
+    public User addMoney(Double money, User user) {
+        Double userMoney = user.getMoney();
+        Double finalMoney = userMoney + money;
+        user.setMoney(finalMoney);
+        return userRepo.save(user);
     }
 }

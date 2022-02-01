@@ -26,12 +26,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void putItemInBasket(Long itemId) {
-        Item item = itemRepo.findItemById(itemId);
-        itemRepo.save(item);
-    }
-
-    @Override
     public Item findItemById(Long id) {
         Item item = itemRepo.findItemById(id);
         if (item != null) {
@@ -42,13 +36,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> findAllByOrder(Basket basket) {
-        return itemRepo.findAllByBasket(basket);
-    }
-
-    @Override
-    public void save(Item item) {
-        itemRepo.save(item);
+    public Item save(Item item) {
+        return itemRepo.save(item);
     }
 
     @Override
@@ -67,14 +56,16 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> sortItemByPrice(Double startPrise, Double lastPrice) {
-        List<Item> allItems = itemRepo.findAll();
         List<Item> sortItems = new ArrayList<>();
-        if (startPrise < 0 && lastPrice < 0) {
+        if (startPrise < 0 || lastPrice < 0) {
             return itemRepo.findAll();
         }
         if (startPrise > lastPrice) {
-            return itemRepo.findAll();
+            double price = startPrise;
+            startPrise = lastPrice;
+            lastPrice = price;
         }
+        List<Item> allItems = itemRepo.findItemsByPrise(startPrise, lastPrice);
         for (Item item : allItems) {
             if (item.getPrise() >= startPrise && item.getPrise() <= lastPrice) {
                 sortItems.add(item);

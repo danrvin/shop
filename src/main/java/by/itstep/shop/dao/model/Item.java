@@ -8,7 +8,7 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Double id;
+    private Long id;
 
     private String name;
 
@@ -27,6 +27,10 @@ public class Item {
     public Item() {
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getType() {
         return type;
     }
@@ -41,10 +45,6 @@ public class Item {
 
     public void setBasket(Basket basket) {
         this.basket = basket;
-    }
-
-    public Double getId() {
-        return id;
     }
 
     public String getName() {

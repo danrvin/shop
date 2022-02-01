@@ -15,21 +15,17 @@ public interface UserService {
 
     Optional<User> findByUsernameOptional(String name);
 
-    User findByEmail(String email);
-
     User save(User user);
 
     void deleteUser(User user);
 
     void setStartMoney(User user);
 
-    void userSetMoneyFromItem(User user, Long id);
-
     List<User> findAll();
-
-    User getOne(Long id);
 
     List<User> users();
 
     User updateUser(User userFromDb, User user);
+
+    User addMoney(Double money, User user);
 }

@@ -6,7 +6,8 @@ public enum Permission {
     USERS_READ("user:read"),
     USERS_WRITE("user:write"),
     BASKET_READ("basket:read"),
-    BASKET_WRITE("basket:write");
+    BASKET_WRITE("basket:write"),
+    TRANSACTION_BUY("transaction:buy");
 
     private final String permission;
 
