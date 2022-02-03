@@ -5,6 +5,8 @@ import by.itstep.shop.dao.model.dto.AuthenticationRequestDTO;
 import by.itstep.shop.security.JwtTokenProvider;
 import by.itstep.shop.security.SecurityUser;
 import by.itstep.shop.service.impl.UserServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,12 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationRestController {
+
+    private final Logger logger = LoggerFactory.getLogger(ItemRestController.class);
 
     private final AuthenticationManager authenticationManager;
     private final UserServiceImpl userService;
@@ -51,7 +56,7 @@ public class AuthenticationRestController {
             Map<Object, Object> body = new HashMap<>();
             body.put("username", request.getUsername());
             body.put("token", token);
-
+            logger.info("User " + user.getUsername() + " logged in");
             return ResponseEntity.ok(body);
         } catch (AuthenticationException e) {
             return new ResponseEntity<>("Invalid email password combination", HttpStatus.FORBIDDEN);
@@ -59,13 +64,26 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("/register")
-    public UserDetails user(@RequestBody User user) {
-        return SecurityUser.fromUser(userService.save(user));
+    public ResponseEntity<?> user(@RequestBody User user)
+    {
+        try {
+            SecurityUser.fromUser(userService.save(user));
+            logger.info("User: " + user.getUsername() + " has registered");
+            return ResponseEntity.ok().body(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
     @PostMapping("/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
-        SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
-        securityContextLogoutHandler.logout(request, response, null);
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response, Principal principal) {
+        try {
+            SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
+            securityContextLogoutHandler.logout(request, response, null);
+            return ResponseEntity.ok().body(userService.findByUsername(principal.getName()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+
     }
 }

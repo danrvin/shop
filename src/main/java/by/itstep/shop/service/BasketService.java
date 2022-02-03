@@ -6,7 +6,7 @@ import by.itstep.shop.dao.model.User;
 import java.util.List;
 
 public interface BasketService {
-    void deleteInBasket(Long itemId);
+    void deleteInBasket(Long itemId,User user);
 
     List<Item> allItemsInBasket(User user);
 

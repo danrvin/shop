@@ -4,6 +4,9 @@ import by.itstep.shop.dao.model.Item;
 import by.itstep.shop.service.BasketService;
 import by.itstep.shop.service.ItemService;
 import by.itstep.shop.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,32 +17,71 @@ import java.util.List;
 @RequestMapping("/api/basket")
 public class BasketRestController {
 
+    private final Logger logger = LoggerFactory.getLogger(ItemRestController.class);
+
     private final BasketService basketService;
     private final UserService userService;
+    private final ItemService itemService;
 
-    public BasketRestController(BasketService basketService, UserService userService) {
+    public BasketRestController(BasketService basketService, UserService userService, ItemService itemService) {
+
         this.basketService = basketService;
         this.userService = userService;
+        this.itemService = itemService;
     }
 
-    @PostMapping("/put/{id}")
+
+    @GetMapping("/")
+    @PreAuthorize(value = "hasAuthority('basket:read')")
+    public ResponseEntity<?> items(Principal principal) {
+        try {
+            return ResponseEntity.ok().body(
+                    basketService.allItemsInBasket(
+                            userService.findByUsername(principal.getName())));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/put")
     @PreAuthorize(value = "hasAuthority('basket:write')")
-    public List<Item> InBasket(@PathVariable Long id, Principal principal) {
-        basketService.putInBasket(id, userService.findByUsername(principal.getName()));
-        return basketService.allItemsInBasket(userService.findByUsername(principal.getName()));
+    public ResponseEntity<?> InBasket(@RequestParam Long id, Principal principal) {
+        try {
+            basketService.putInBasket(id, userService.findByUsername(principal.getName()));
+            logger.info("added in basket:" + itemService.findItemById(id).getName());
+            return ResponseEntity.ok().body(
+                    basketService.allItemsInBasket(
+                            userService.findByUsername(principal.getName())));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/items")
     @PreAuthorize(value = "hasAuthority('basket:read')")
-    public List<Item> deleteAllInBasket(Principal principal) {
-        basketService.deleteAllInBasket(userService.findByUsername(principal.getName()));
-        return basketService.allItemsInBasket(userService.findByUsername(principal.getName()));
+    public ResponseEntity<?> deleteAllInBasket(Principal principal) {
+        try {
+            basketService.deleteAllInBasket(userService.findByUsername(principal.getName()));
+            logger.info("All items removed");
+            return ResponseEntity.ok().body(
+                    basketService.allItemsInBasket(
+                            userService.findByUsername(principal.getName())));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/item/{id}")
-    @PreAuthorize(value = "hasAuthority('basket:write')")
-    public List<Item> deleteItemInBasket(@PathVariable Long id, Principal principal) {
-        basketService.deleteInBasket(id);
-        return basketService.allItemsInBasket(userService.findByUsername(principal.getName()));
+    @PreAuthorize(value = "hasAuthority('item:write')")
+    public ResponseEntity<?> deleteInBasket(@PathVariable Long id, Principal principal) {
+        try {
+            basketService.deleteInBasket(id, userService.findByUsername(principal.getName()));
+            logger.info("Item removed:" + itemService.findItemById(id).getName());
+            return ResponseEntity.ok().body(
+                    basketService.allItemsInBasket(
+                            userService.findByUsername(principal.getName())));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 }

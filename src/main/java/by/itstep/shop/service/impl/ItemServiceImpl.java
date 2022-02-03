@@ -27,12 +27,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item findItemById(Long id) {
-        Item item = itemRepo.findItemById(id);
-        if (item != null) {
-            return item;
-        } else {
-            throw new NotFoundItemException("error item id");
-        }
+        return itemRepo.findItemById(id);
     }
 
     @Override
@@ -49,7 +44,7 @@ public class ItemServiceImpl implements ItemService {
     public Item updateItem(Item itemFromDb, Item item) {
         itemFromDb.setName(item.getName());
         itemFromDb.setDescription(item.getDescription());
-        itemFromDb.setPrise(item.getPrise());
+        itemFromDb.setPrice(item.getPrice());
         itemRepo.save(itemFromDb);
         return itemFromDb;
     }
@@ -67,7 +62,7 @@ public class ItemServiceImpl implements ItemService {
         }
         List<Item> allItems = itemRepo.findItemsByPrise(startPrise, lastPrice);
         for (Item item : allItems) {
-            if (item.getPrise() >= startPrise && item.getPrise() <= lastPrice) {
+            if (item.getPrice() >= startPrise && item.getPrice() <= lastPrice) {
                 sortItems.add(item);
             }
         }

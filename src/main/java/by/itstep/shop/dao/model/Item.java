@@ -14,7 +14,7 @@ public class Item {
 
     private String description;
 
-    private Double prise;
+    private Double price;
 
     private String img;
 
@@ -63,12 +63,12 @@ public class Item {
         this.description = description;
     }
 
-    public Double getPrise() {
-        return prise;
+    public Double getPrice() {
+        return price;
     }
 
-    public void setPrise(Double prise) {
-        this.prise = prise;
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public String getImg() {

@@ -26,8 +26,9 @@ public class BasketServiceImpl implements BasketService {
     }
 
     @Override
-    public void deleteInBasket(Long itemId) {
-        Item item = itemRepo.findItemById(itemId);
+    public void deleteInBasket(Long itemId, User user) {
+        Basket basket = basketRepo.findByUser(user);
+        Item item = itemRepo.findItemByIdAndBasketId(itemId, basket.getId());
         item.setBasket(null);
         itemRepo.save(item);
     }
@@ -60,8 +61,8 @@ public class BasketServiceImpl implements BasketService {
     public void buyItemInBasket(Long itemId, User user) {
         Item item = itemRepo.findItemById(itemId);
         Double money = user.getMoney();
-        if (user.getMoney() > item.getPrise()) {
-            user.setMoney(money - item.getPrise());
+        if (user.getMoney() > item.getPrice()) {
+            user.setMoney(money - item.getPrice());
         } else {
             throw new NotEnoughMoneyException("Not enough money");
         }

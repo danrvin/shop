@@ -18,7 +18,7 @@ import java.util.List;
 public class ItemRestController {
 
 
-    Logger logger = LoggerFactory.getLogger(ItemRestController.class);
+    private final Logger logger = LoggerFactory.getLogger(ItemRestController.class);
 
     private final ItemService itemService;
     private final BasketService basketService;
@@ -44,13 +44,13 @@ public class ItemRestController {
 
 
     @GetMapping("/all")
-    public ResponseEntity<List<Item>> items() {
+    public ResponseEntity<?> items() {
         try {
             return ResponseEntity.ok().body(itemService.getAll());
         } catch (Exception e) {
             logger.info(e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
         }
-        return ResponseEntity.internalServerError().build();
     }
 
     @PostMapping("/create")
@@ -58,7 +58,7 @@ public class ItemRestController {
     public ResponseEntity<?> createItem(@RequestBody Item item) {
         try {
             Item newItem = itemService.save(item);
-            logger.info("Crearte Item " + newItem.getName());
+            logger.info("Create Item " + newItem.getName());
             return ResponseEntity.ok().body(itemService.save(item));
 
         } catch (Exception e) {
@@ -67,22 +67,27 @@ public class ItemRestController {
         }
     }
 
-    @DeleteMapping("/item/{id}")
-    @PreAuthorize(value = "hasAuthority('item:write')")
-    public List<Item> deleteInOrder(@PathVariable Long id, Principal principal) {
-        basketService.deleteInBasket(id);
-        return basketService.allItemsInBasket(userService.findByUsername(principal.getName()));
-    }
+
 
     @PutMapping("/update/{id}")
     @PreAuthorize(value = "hasAuthority('item:write')")
-    public Item updateItem(@PathVariable("id") Item itemFromDb, @RequestBody Item item) {
-        itemService.updateItem(itemFromDb, item);
-        return item;
+    public ResponseEntity<?> updateItem(@PathVariable("id") Item itemFromDb, @RequestBody Item item) {
+        try {
+            Item updateItem = itemService.updateItem(itemFromDb, item);
+            logger.info("item update:" + updateItem.getName());
+            return ResponseEntity.ok().body(updateItem);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
     @PostMapping("/sort")
-    public List<Item> sortedItemsByPrice(@RequestParam Double startPrice, @RequestParam Double finalPrice) {
-        return itemService.sortItemByPrice(startPrice, finalPrice);
+    public ResponseEntity<?> sortedItemsByPrice(@RequestParam Double startPrice, @RequestParam Double finalPrice) {
+        try {
+            List<Item> items = itemService.sortItemByPrice(startPrice, finalPrice);
+            return ResponseEntity.ok().body(items);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 }

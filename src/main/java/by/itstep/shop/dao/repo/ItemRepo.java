@@ -11,9 +11,12 @@ import java.util.List;
 public interface ItemRepo extends JpaRepository<Item, Long> {
     Item findItemById(Long id);
 
+    Item findItemByIdAndBasketId(Long itemId, Long basketId);
+
     List<Item> findAllByBasket(Basket basket);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM ITEM WHERE PRISE between :firstPrice AND :lastPrice ORDER BY PRISE")
+
+    @Query(nativeQuery = true, value = "SELECT * FROM ITEM WHERE PRICE between :firstPrice AND :lastPrice ORDER BY PRICE")
     List<Item> findItemsByPrise(Double firstPrice, Double lastPrice);
 
 }
