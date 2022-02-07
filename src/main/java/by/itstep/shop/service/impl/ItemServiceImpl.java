@@ -1,10 +1,9 @@
 package by.itstep.shop.service.impl;
 
 import by.itstep.shop.dao.model.Item;
-import by.itstep.shop.dao.model.Basket;
 import by.itstep.shop.dao.repo.ItemRepo;
 import by.itstep.shop.service.ItemService;
-import by.itstep.shop.service.exceptions.NotFoundItemException;
+import by.itstep.shop.service.exceptions.InvalidItemException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,6 +43,9 @@ public class ItemServiceImpl implements ItemService {
     public Item updateItem(Item itemFromDb, Item item) {
         itemFromDb.setName(item.getName());
         itemFromDb.setDescription(item.getDescription());
+        if (item.getPrice() <= 0) {
+            throw new InvalidItemException("invalid item" + item.getName());
+        }
         itemFromDb.setPrice(item.getPrice());
         itemRepo.save(itemFromDb);
         return itemFromDb;

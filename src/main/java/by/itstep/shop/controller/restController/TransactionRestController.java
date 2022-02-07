@@ -43,6 +43,7 @@ public class TransactionRestController {
                     basketService.allItemsInBasket(
                             userService.findByUsername(principal.getName())));
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }

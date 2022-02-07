@@ -33,13 +33,13 @@ public class ItemRestController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Item> item(@PathVariable Long id) {
+    public ResponseEntity<?> item(@PathVariable Long id) {
         try {
             return ResponseEntity.ok().body(itemService.findItemById(id));
         } catch (Exception e) {
             logger.info(e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
         }
-        return ResponseEntity.internalServerError().build();
     }
 
 
@@ -62,7 +62,7 @@ public class ItemRestController {
             return ResponseEntity.ok().body(itemService.save(item));
 
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
@@ -77,6 +77,7 @@ public class ItemRestController {
             logger.info("item update:" + updateItem.getName());
             return ResponseEntity.ok().body(updateItem);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
@@ -87,6 +88,7 @@ public class ItemRestController {
             List<Item> items = itemService.sortItemByPrice(startPrice, finalPrice);
             return ResponseEntity.ok().body(items);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }

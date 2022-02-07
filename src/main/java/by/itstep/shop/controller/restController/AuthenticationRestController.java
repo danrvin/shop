@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +58,7 @@ public class AuthenticationRestController {
             logger.info("User " + user.getUsername() + " logged in");
             return ResponseEntity.ok(body);
         } catch (AuthenticationException e) {
+            logger.error(e.getMessage());
             return new ResponseEntity<>("Invalid email password combination", HttpStatus.FORBIDDEN);
         }
     }
@@ -71,6 +71,7 @@ public class AuthenticationRestController {
             logger.info("User: " + user.getUsername() + " has registered");
             return ResponseEntity.ok().body(user);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
@@ -82,6 +83,7 @@ public class AuthenticationRestController {
             securityContextLogoutHandler.logout(request, response, null);
             return ResponseEntity.ok().body(userService.findByUsername(principal.getName()));
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return ResponseEntity.status(500).body(e.getMessage());
         }
 
