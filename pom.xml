@@ -5,7 +5,6 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-<<<<<<< HEAD
         <version>2.5.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
@@ -14,15 +13,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>ItemWarBeta</name>
-=======
-        <version>2.6.3</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-    <groupId>com.example</groupId>
-    <artifactId>demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>demo</name>
->>>>>>> afe5b41 (initial commit)
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
@@ -30,7 +20,6 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-<<<<<<< HEAD
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
@@ -49,17 +38,10 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-=======
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
->>>>>>> afe5b41 (initial commit)
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-<<<<<<< HEAD
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -78,7 +60,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-<!-- token-->
+        <!-- token-->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
@@ -89,8 +71,6 @@
             <artifactId>jakarta.xml.bind-api</artifactId>
             <version>2.3.3</version>
         </dependency>
-=======
->>>>>>> afe5b41 (initial commit)
     </dependencies>
 
     <build>
@@ -102,8 +82,4 @@
         </plugins>
     </build>
 
-<<<<<<< HEAD
 </project>
-=======
-</project>
->>>>>>> afe5b41 (initial commit)

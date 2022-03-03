@@ -4,6 +4,7 @@ import by.itstep.shop.dao.model.Item;
 import by.itstep.shop.dao.repo.ItemRepo;
 import by.itstep.shop.service.ItemService;
 import by.itstep.shop.service.exceptions.InvalidItemException;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void deleteItem(Item item) {
-
         itemRepo.delete(item);
     }
 
@@ -55,7 +55,7 @@ public class ItemServiceImpl implements ItemService {
     public List<Item> sortItemByPrice(Double startPrise, Double lastPrice) {
         List<Item> sortItems = new ArrayList<>();
         if (startPrise < 0 || lastPrice < 0) {
-            return itemRepo.findAll();
+            throw new InvalidItemException("Wrong price to sort");
         }
         if (startPrise > lastPrice) {
             double price = startPrise;

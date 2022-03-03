@@ -2,14 +2,13 @@ package by.itstep.shop.service.impl;
 
 
 import by.itstep.shop.dao.model.Basket;
-import by.itstep.shop.dao.model.Item;
 import by.itstep.shop.dao.model.User;
 import by.itstep.shop.dao.model.enums.Role;
 import by.itstep.shop.dao.model.enums.Status;
-import by.itstep.shop.dao.repo.ItemRepo;
 import by.itstep.shop.dao.repo.BasketRepo;
 import by.itstep.shop.dao.repo.UserRepo;
 import by.itstep.shop.service.UserService;
+import by.itstep.shop.service.exceptions.InvalidUserPasswordException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User loadUserByUsername(String username){
+    public User loadUserByUsername(String username) {
         return userRepo.findByUsername(username);
     }
 
@@ -57,7 +56,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
         user.setStatus(Status.ACTIVE);
-        user.setMoney(400.0);
+        user.setMoney(0.0);
         userRepo.save(user);
         Basket basket = new Basket();
         basket.setUser(user);
@@ -87,9 +86,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User userFromDb, User user) {
-        userFromDb.setPassword(user.getPassword());
-        if (user.getStatus() != null) {
-            userFromDb.setStatus(user.getStatus());
+        userFromDb.setStatus(user.getStatus());
+        if (user.getPassword() == null) {
+            throw new InvalidUserPasswordException("invalid password");
+        } else {
+            userFromDb.setPassword(user.getPassword());
         }
         userFromDb.setEmail(user.getEmail());
         userFromDb.setRole(user.getRole());
