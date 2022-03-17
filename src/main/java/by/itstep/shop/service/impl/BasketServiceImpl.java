@@ -7,9 +7,9 @@ import by.itstep.shop.dao.repo.ItemRepo;
 import by.itstep.shop.dao.repo.BasketRepo;
 import by.itstep.shop.dao.repo.UserRepo;
 import by.itstep.shop.service.BasketService;
+import by.itstep.shop.service.exceptions.InvalidItemException;
 import by.itstep.shop.service.exceptions.NotEnoughMoneyException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -29,8 +29,12 @@ public class BasketServiceImpl implements BasketService {
     public void deleteInBasket(Long itemId, User user) {
         Basket basket = basketRepo.findByUser(user);
         Item item = itemRepo.findItemByIdAndBasketId(itemId, basket.getId());
-        item.setBasket(null);
-        itemRepo.save(item);
+        if (item != null) {
+            item.setBasket(null);
+            itemRepo.save(item);
+        } else {
+            throw new InvalidItemException("there is no item with this id in your basket");
+        }
     }
 
     @Override
@@ -42,9 +46,13 @@ public class BasketServiceImpl implements BasketService {
     @Override
     public void putInBasket(Long id, User user) {
         Item item = itemRepo.findItemById(id);
-        Basket basket = basketRepo.findByUser(user);
-        item.setBasket(basket);
-        itemRepo.save(item);
+        if (item != null) {
+            Basket basket = basketRepo.findByUser(user);
+            item.setBasket(basket);
+            itemRepo.save(item);
+        } else {
+            throw new InvalidItemException("there is no item with this id");
+        }
     }
 
     @Override

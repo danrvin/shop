@@ -2,15 +2,11 @@ package by.itstep.shop.controller.restController;
 
 import by.itstep.shop.dao.model.Item;
 import by.itstep.shop.service.ItemService;
-import by.itstep.shop.service.BasketService;
-import by.itstep.shop.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,19 +17,15 @@ public class ItemRestController {
     private final Logger logger = LoggerFactory.getLogger(ItemRestController.class);
 
     private final ItemService itemService;
-    private final BasketService basketService;
-    private final UserService userService;
 
 
-    public ItemRestController(ItemService itemService, BasketService basketService, UserService userService) {
+    public ItemRestController(ItemService itemService) {
         this.itemService = itemService;
-        this.basketService = basketService;
-        this.userService = userService;
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> item(@PathVariable Long id) {
+    @GetMapping("/")
+    public ResponseEntity<?> item(@RequestParam Long id) {
         try {
             return ResponseEntity.ok().body(itemService.findItemById(id));
         } catch (Exception e) {
@@ -69,11 +61,11 @@ public class ItemRestController {
 
 
 
-    @PutMapping("/update/{id}")
+    @PostMapping("/update")
     @PreAuthorize(value = "hasAuthority('item:write')")
-    public ResponseEntity<?> updateItem(@PathVariable("id") Item itemFromDb, @RequestBody Item item) {
+    public ResponseEntity<?> updateItem(@RequestParam Long id, @RequestBody Item item) {
         try {
-            Item updateItem = itemService.updateItem(itemFromDb, item);
+            Item updateItem = itemService.updateItem(itemService.findItemById(id), item);
             logger.info("item update:" + updateItem.getName());
             return ResponseEntity.ok().body(updateItem);
         } catch (Exception e) {

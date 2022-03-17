@@ -45,7 +45,7 @@ public class BasketRestController {
     }
 
     @PostMapping("/put")
-    @PreAuthorize(value = "hasAuthority('basket:write')")
+    @PreAuthorize(value = "hasAuthority('basket:read')")
     public ResponseEntity<?> InBasket(@RequestParam Long id, Principal principal) {
         try {
             basketService.putInBasket(id, userService.findByUsername(principal.getName()));
@@ -60,7 +60,7 @@ public class BasketRestController {
     }
 
     @DeleteMapping("/items")
-    @PreAuthorize(value = "hasAuthority('basket:read')")
+    @PreAuthorize(value = "hasAuthority('basket:write')")
     public ResponseEntity<?> deleteAllInBasket(Principal principal) {
         try {
             basketService.deleteAllInBasket(userService.findByUsername(principal.getName()));
@@ -74,9 +74,9 @@ public class BasketRestController {
         }
     }
 
-    @DeleteMapping("/item/{id}")
-    @PreAuthorize(value = "hasAuthority('item:write')")
-    public ResponseEntity<?> deleteInBasket(@PathVariable Long id, Principal principal) {
+    @DeleteMapping("/item")
+    @PreAuthorize(value = "hasAuthority('basket:write')")
+    public ResponseEntity<?> deleteItemInBasket(@RequestParam Long id, Principal principal) {
         try {
             basketService.deleteInBasket(id, userService.findByUsername(principal.getName()));
             logger.info("Item removed:" + itemService.findItemById(id).getName());

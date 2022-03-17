@@ -1,6 +1,5 @@
 package by.itstep.shop.controller.restController;
 
-import by.itstep.shop.dao.model.User;
 import by.itstep.shop.service.BasketService;
 import by.itstep.shop.service.ItemService;
 import by.itstep.shop.service.UserService;
@@ -29,16 +28,25 @@ public class TransactionRestController {
     }
 
     @PostMapping("/money")
-    public User updateMoney(@RequestBody Double money, Principal principal) {
-        return userService.addMoney(money, userService.findByUsername(principal.getName()));
+    @PreAuthorize(value = "hasAuthority('transaction:money')")
+    public ResponseEntity<?> addMoney(@RequestParam Double money, Principal principal) {
+        try {
+            userService.addMoney(money, userService.findByUsername(principal.getName()));
+            logger.info("user" + principal.getName() + "added money in his wallet");
+            return ResponseEntity.ok().body(
+                    userService.findByUsername(principal.getName()).getMoney());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/")
     @PreAuthorize(value = "hasAuthority('transaction:buy')")
-    public ResponseEntity<?> buyItemsInBasket(@PathVariable Long id, Principal principal) {
+    public ResponseEntity<?> buyItemInBasket(@RequestParam Long id, Principal principal) {
         try {
-            basketService.buyItemInBasket(id, userService.loadUserByUsername(principal.getName()));
             logger.info("item sold:" + itemService.findItemById(id));
+            basketService.buyItemInBasket(id, userService.findByUsername(principal.getName()));
             return ResponseEntity.ok().body(
                     basketService.allItemsInBasket(
                             userService.findByUsername(principal.getName())));

@@ -12,11 +12,7 @@ public class Item {
 
     private String name;
 
-    private String description;
-
     private Double price;
-
-    private String img;
 
     private String type;
 
@@ -25,6 +21,10 @@ public class Item {
     private Basket basket;
 
     public Item() {
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
@@ -55,13 +55,6 @@ public class Item {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public Double getPrice() {
         return price;
@@ -71,11 +64,4 @@ public class Item {
         this.price = price;
     }
 
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
 }

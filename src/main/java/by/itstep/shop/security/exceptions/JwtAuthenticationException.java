@@ -4,8 +4,6 @@ package by.itstep.shop.security.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 
-import javax.servlet.http.HttpServlet;
-
 public class JwtAuthenticationException extends AuthenticationException {
 
     private HttpStatus httpStatus;

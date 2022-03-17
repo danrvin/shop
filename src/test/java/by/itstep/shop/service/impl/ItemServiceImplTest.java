@@ -47,11 +47,9 @@ public class ItemServiceImplTest {
     public void updateItem_Success() {
         Item itemFromDb = new Item();
         Item item = new Item();
-        item.setDescription("hrgvew");
         item.setName("hrwmk");
         item.setPrice(6343.6);
         itemFromDb.setName(item.getName());
-        itemFromDb.setDescription(item.getDescription());
         itemFromDb.setPrice(item.getPrice());
         itemService.updateItem(itemFromDb, item);
     }
@@ -60,11 +58,9 @@ public class ItemServiceImplTest {
     public void updateItem_Exception() {
         Item itemFromDb = new Item();
         Item item = new Item();
-        item.setDescription("hrgvew");
         item.setName("hrwmk");
         item.setPrice(-6343.6);
         itemFromDb.setName(item.getName());
-        itemFromDb.setDescription(item.getDescription());
         itemFromDb.setPrice(item.getPrice());
         Assertions.assertThrows(InvalidItemException.class, () -> itemService.updateItem(itemFromDb, item));
     }
@@ -104,6 +100,20 @@ public class ItemServiceImplTest {
         itemService.sortItemByPrice(startPrise,lastPrice);
     }
 
+    @Test
+    public void findItemById_NotFoundException() {
+        long id = 1;
+        Assertions.assertThrows(InvalidItemException.class, () -> itemService.findItemById(id));
+    }
+
+
+    @Test
+    public void findItemById_Success() {
+        long id = 1;
+        Item item = new Item();
+        Mockito.when(itemRepo.findItemById(id)).thenReturn(item);
+        itemService.findItemById(id);
+    }
 
 
 }

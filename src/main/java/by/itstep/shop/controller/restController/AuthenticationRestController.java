@@ -46,7 +46,7 @@ public class AuthenticationRestController {
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequestDTO request, HttpServletResponse response) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-            User user = userService.findByUsernameOptional(request.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
+            User user = userService.findByUsername(request.getUsername());
             String token = jwtTokenProvider.createToken(request.getUsername(), user.getRole().name());
             Cookie cookie = new Cookie("token", token);
             cookie.setHttpOnly(true);

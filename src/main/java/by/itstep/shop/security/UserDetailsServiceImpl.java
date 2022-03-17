@@ -3,6 +3,7 @@ package by.itstep.shop.security;
 
 import by.itstep.shop.dao.model.User;
 import by.itstep.shop.dao.repo.UserRepo;
+import by.itstep.shop.service.exceptions.InvalidUserException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,8 +20,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepo.findByEmail(email).orElseThrow(() ->
-                new UsernameNotFoundException("User doesn't exist"));
-        return SecurityUser.fromUser(user);
+            User user = userRepo.findByEmail(email).orElseThrow(() ->
+                    new InvalidUserException("User doesn't exist"));
+            return SecurityUser.fromUser(user);
+
     }
 }

@@ -8,13 +8,10 @@ import by.itstep.shop.dao.model.enums.Status;
 import by.itstep.shop.dao.repo.BasketRepo;
 import by.itstep.shop.dao.repo.UserRepo;
 import by.itstep.shop.service.UserService;
-import by.itstep.shop.service.exceptions.InvalidUserPasswordException;
+import by.itstep.shop.service.exceptions.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -31,24 +28,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User loadUserByUsername(String username) {
-        return userRepo.findByUsername(username);
-    }
-
-    @Override
-    public User findByUserId(Long id) {
-        return userRepo.findById(id).get();
-    }
-
-    @Override
     public User findByUsername(String name) {
-        return userRepo.findByUsername(name);
+        User user = userRepo.findByUsername(name);
+        if (user == null) {
+            throw new InvalidUserException("user not found");
+        } else return user;
     }
 
-    @Override
-    public Optional<User> findByUsernameOptional(String name) {
-        return userRepo.findUserByUsername(name);
-    }
 
     @Override
     public User save(User user) {
@@ -64,28 +50,9 @@ public class UserServiceImpl implements UserService {
         return userRepo.save(user);
     }
 
-    @Override
-    public void deleteUser(User user) {
-        userRepo.delete(user);
-    }
 
     @Override
-    public void setStartMoney(User user) {
-        user.setMoney(400.0);
-    }
-
-    @Override
-    public List<User> findAll() {
-        return userRepo.findAll();
-    }
-
-    @Override
-    public List<User> users() {
-        return userRepo.findAll();
-    }
-
-    @Override
-    public User updateUser(User userFromDb, User user) {
+    public void updateUser(User userFromDb, User user) {
         userFromDb.setStatus(user.getStatus());
         if (user.getPassword() == null) {
             throw new InvalidUserPasswordException("invalid password");
@@ -95,14 +62,17 @@ public class UserServiceImpl implements UserService {
         userFromDb.setEmail(user.getEmail());
         userFromDb.setRole(user.getRole());
         userRepo.save(userFromDb);
-        return userFromDb;
     }
 
     @Override
-    public User addMoney(Double money, User user) {
+    public void addMoney(Double money, User user) {
         Double userMoney = user.getMoney();
-        Double finalMoney = userMoney + money;
-        user.setMoney(finalMoney);
-        return userRepo.save(user);
+        if (money > 0) {
+            Double finalMoney = userMoney + money;
+            user.setMoney(finalMoney);
+        } else {
+            throw new MoneyException("Money can't be null or negative number");
+        }
+        userRepo.save(user);
     }
 }

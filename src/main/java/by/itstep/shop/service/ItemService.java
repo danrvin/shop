@@ -2,12 +2,10 @@ package by.itstep.shop.service;
 
 
 import by.itstep.shop.dao.model.Item;
-import by.itstep.shop.dao.model.Basket;
 
 import java.util.List;
 
 public interface ItemService {
-    void deleteItem(Item item);
 
     Item save(Item item);
 

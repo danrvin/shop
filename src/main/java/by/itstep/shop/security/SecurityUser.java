@@ -4,6 +4,7 @@ package by.itstep.shop.security;
 
 import by.itstep.shop.dao.model.User;
 import by.itstep.shop.dao.model.enums.Status;
+import by.itstep.shop.service.exceptions.InvalidUserException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
